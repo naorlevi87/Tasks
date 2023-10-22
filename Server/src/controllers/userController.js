@@ -15,6 +15,6 @@ const login =  (req,res)=> {
     }
 };
 
-export const loginRoute = { 
+export const User = { 
     login
 };
