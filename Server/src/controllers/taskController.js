@@ -1,4 +1,3 @@
-import { now } from "mongoose";
 import { Task } from "../models/TaskModel.js";
 
 const getAllTasks = async (req, res) => {
@@ -35,7 +34,7 @@ const createNewTask = async (req, res) => {
 
 }
 
-const updateTask = async (req, res) => {
+const updateTaskById = async (req, res) => {
     const { id } = req.params;
     // Find the task by its ID
     const task = await Task.findById(id);
@@ -60,14 +59,14 @@ const updateTask = async (req, res) => {
         // Save the updated task
         await task.save();
 
-        res.json(task);
+        res.status(200).send(task);
     } catch (error) {
         res.status(500).send("Internal server error" );
         console.los(error);
     }
 }
 
-const deleteTask = async (req, res) => {
+const deleteTaskById = async (req, res) => {
     const { id } = req.params;
     try {
         // Find the task by its ID
@@ -76,8 +75,9 @@ const deleteTask = async (req, res) => {
             return res.status(404).send("Task not found" );
         }
         // Delete the task
+        const taskTitle = task.title;
         await task.deleteOne();
-        res.json(task);
+        res.status(200).send("task "+taskTitle+" deleted successfully");
     }   catch (err) {
         res.status(500).send("Internal server error" );
         console.log(err);
@@ -85,9 +85,9 @@ const deleteTask = async (req, res) => {
 };
 
 
-export const taskRoute = {
+export const taskController = {
     getAllTasks,
     createNewTask,
-    updateTask,
-    deleteTask
+    updateTaskById,
+    deleteTaskById
 }

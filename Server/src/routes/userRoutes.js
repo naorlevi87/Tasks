@@ -2,19 +2,59 @@ import express from "express";
 import { userController } from "../controllers/userController.js";
 const userRouter = new express.Router();
 
-
+// ## User Routes to UserController ## 
 
 //router.post("/login", User.login); 
 
-userRouter.post("/login", userController.authUser);
+// @desc    Auth user & get token
+// @route   POST /api/users/login
+// @access  Public
+userRouter.post('/login', userController.authUser);
 
-userRouter.post("/logout", userController.logoutUser);
+// @desc    Register new user
+// @route   POST /api/users
+// @access  Public
+userRouter.post('/', userController.registerUser);
 
-userRouter.post("/").post(userController.registerUser).get(userController.getUsers);
+// @desc    Logout current user & clear cookie
+// @route   POST /api/users/logout
+// @access  Private
+userRouter.post('/logout', userController.logoutUser);
 
-userRouter.post("/profile").get(userController.getUserProfile).put(userController.updateUserProfile);
+// @desc    Get current user profile
+// @route   GET /api/users/profile
+// @access  Private
+userRouter.get('/profile',userController.getUserProfile)
 
-userRouter.post("/:id").get(userController.getUserbyId).put(userController.updateUser).delete(userController.deleteUser);
+// @desc    Update current user profile
+// @route   PUT /api/users/profile
+// @access  Private
+userRouter.put('/profile',userController.updateUserProfile);
+
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Private/Admin
+userRouter.get('/', userController.getUsers);
+
+// @desc    Get user by ID
+// @route   GET /api/users/:id
+// @access  Private/Admin
+// @param   {String:id} req.params.id
+userRouter.get('/:id',userController.getUserbyId);
+
+// @desc    Delete user by ID 
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+// @param   {String:id} req.params.id
+userRouter.delete('/:id',userController.deleteUserById);
+
+// @desc    Update user by ID
+// @route   PUT /api/users/:id
+// @access  Private/Admin
+// @param   {String:id} req.params.id
+userRouter.put('/:id',userController.updateUserById);
 
 
 export default userRouter;
+
+
