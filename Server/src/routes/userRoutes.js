@@ -1,5 +1,6 @@
 import express from "express";
 import { userController } from "../controllers/userController.js";
+import { isAdmin, isLoggedIn } from "../middleware/authMiddleware.js";
 const userRouter = new express.Router();
 
 // ## User Routes to UserController ## 
@@ -19,40 +20,40 @@ userRouter.post('/', userController.registerUser);
 // @desc    Logout current user & clear cookie
 // @route   POST /api/users/logout
 // @access  Private
-userRouter.post('/logout', userController.logoutUser);
+userRouter.post('/logout',isLoggedIn, userController.logoutUser);
 
 // @desc    Get current user profile
 // @route   GET /api/users/profile
 // @access  Private
-userRouter.get('/profile',userController.getUserProfile)
+userRouter.get('/profile',isLoggedIn,userController.getUserProfile)
 
 // @desc    Update current user profile
 // @route   PUT /api/users/profile
 // @access  Private
-userRouter.put('/profile',userController.updateUserProfile);
+userRouter.put('/profile',isLoggedIn,userController.updateUserProfile);
 
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
-userRouter.get('/', userController.getUsers);
+userRouter.get('/',isLoggedIn,isAdmin, userController.getUsers);
 
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
 // @param   {String:id} req.params.id
-userRouter.get('/:id',userController.getUserbyId);
+userRouter.get('/:id',isLoggedIn,isAdmin, userController.getUserbyId);
 
 // @desc    Delete user by ID 
 // @route   DELETE /api/users/:id
 // @access  Private/Admin
 // @param   {String:id} req.params.id
-userRouter.delete('/:id',userController.deleteUserById);
+userRouter.delete('/:id',isLoggedIn,isAdmin, userController.deleteUserById);
 
 // @desc    Update user by ID
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 // @param   {String:id} req.params.id
-userRouter.put('/:id',userController.updateUserById);
+userRouter.put('/:id',isLoggedIn,isAdmin, userController.updateUserById);
 
 
 export default userRouter;
